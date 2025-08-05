@@ -1,65 +1,64 @@
-// Check if user is logged in
-if (window.location.pathname.includes("index.html") && !localStorage.getItem("loggedUser")) {
-  window.location.href = "login.html"; // Redirect to login
-}
+// Replace with your Firebase config
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com/",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-// Signup function
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+// Sign up
 function signup() {
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
-  let users = JSON.parse(localStorage.getItem("users")) || {};
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-  if (users[username]) {
-    document.getElementById("message").innerText = "Username already exists!";
-  } else {
-    users[username] = password;
-    localStorage.setItem("users", JSON.stringify(users));
-    document.getElementById("message").innerText = "Signup successful! Please login.";
-  }
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => document.getElementById("message").innerText = "Signup successful! Please login.")
+    .catch(err => document.getElementById("message").innerText = err.message);
 }
 
-// Login function
+// Login
 function login() {
-  let username = document.getElementById("username").value;
-  let password = document.getElementById("password").value;
-  let users = JSON.parse(localStorage.getItem("users")) || {};
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-  if (users[username] && users[username] === password) {
-    localStorage.setItem("loggedUser", username);
-    window.location.href = "index.html";
-  } else {
-    document.getElementById("message").innerText = "Invalid username or password!";
-  }
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "index.html")
+    .catch(err => document.getElementById("message").innerText = err.message);
 }
 
-// Add post function
-function addPost() {
-  let postInput = document.getElementById("postInput").value;
-  if (!postInput) return;
-
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
-  posts.unshift({ user: localStorage.getItem("loggedUser"), text: postInput });
-  localStorage.setItem("posts", JSON.stringify(posts));
-
-  document.getElementById("postInput").value = "";
-  displayPosts();
+// Logout
+function logout() {
+  auth.signOut().then(() => window.location.href = "login.html");
 }
 
-// Display posts
-function displayPosts() {
-  if (!document.getElementById("postsList")) return;
-  let posts = JSON.parse(localStorage.getItem("posts")) || [];
-  let postsList = document.getElementById("postsList");
-  postsList.innerHTML = "";
+// Send a message
+function sendMessage() {
+  const user = auth.currentUser;
+  if (!user) return;
+  const message = document.getElementById("messageInput").value;
+  if (!message) return;
 
-  posts.forEach(post => {
-    let li = document.createElement("li");
-    li.innerText = post.user + ": " + post.text;
-    postsList.appendChild(li);
+  db.ref("messages").push({
+    user: user.email,
+    text: message
   });
+
+  document.getElementById("messageInput").value = "";
 }
 
-// Load posts on homepage
-if (document.getElementById("postsList")) {
-  displayPosts();
+// Display live messages
+if (document.getElementById("messagesList")) {
+  db.ref("messages").on("child_added", snapshot => {
+    const msg = snapshot.val();
+    const li = document.createElement("li");
+    li.innerText = `${msg.user}: ${msg.text}`;
+    document.getElementById("messagesList").appendChild(li);
+  });
 }
