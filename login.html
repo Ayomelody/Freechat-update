@@ -12,14 +12,18 @@
   </header>
 
   <main>
-    <input type="text" id="username" placeholder="Enter Username">
+    <input type="email" id="email" placeholder="Enter Email">
     <input type="password" id="password" placeholder="Enter Password">
     
     <button onclick="signup()">Sign Up</button>
     <button onclick="login()">Login</button>
-    
     <p id="message"></p>
   </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
 
   <script src="script.js"></script>
 </body>
