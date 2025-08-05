@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeChat - Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to FreeChat</h1>
+    <nav>
+      <a href="login.html" id="logoutBtn">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Post Something</h2>
+    <textarea id="postInput" placeholder="What's on your mind?"></textarea>
+    <button onclick="addPost()">Post</button>
+
+    <h2>Recent Posts</h2>
+    <ul id="postsList"></ul>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
