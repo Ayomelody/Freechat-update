@@ -8,20 +8,25 @@
 </head>
 <body>
   <header>
-    <h1>Welcome to FreeChat</h1>
+    <h1>FreeChat</h1>
     <nav>
-      <a href="login.html" id="logoutBtn">Logout</a>
+      <button onclick="logout()">Logout</button>
     </nav>
   </header>
 
   <main>
-    <h2>Post Something</h2>
-    <textarea id="postInput" placeholder="What's on your mind?"></textarea>
-    <button onclick="addPost()">Post</button>
+    <h2>Post a Message</h2>
+    <textarea id="messageInput" placeholder="Type your message..."></textarea>
+    <button onclick="sendMessage()">Send</button>
 
-    <h2>Recent Posts</h2>
-    <ul id="postsList"></ul>
+    <h2>Live Chat</h2>
+    <ul id="messagesList"></ul>
   </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
 
   <script src="script.js"></script>
 </body>
